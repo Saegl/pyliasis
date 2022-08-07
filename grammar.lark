@@ -1,0 +1,91 @@
+?start: stmts
+stmts: stmt*
+
+?stmt: "\n"* (import_stmt 
+    | while_stmt
+    | for_stmt
+    | cond_stmt
+    | assign_stmt
+    | def_stmt
+    | return_stmt
+    | class_stmt
+    | expr) "\n"+
+
+import_stmt.3: import_name | import_from
+import_name.3: "import" dotted_names
+import_from.3: "from" dotted_name "import" name_list
+
+while_stmt.3: "while" expr "do" stmts "end"
+for_stmt.3: "for" name_list "in" expr "do" stmts "end"
+cond_stmt.3: "if" expr "then" stmts ("elif" expr "then" stmts)* ["else" stmts] "end"
+assign_stmt.3: CNAME "=" expr
+def_stmt.5: "def" CNAME "(" def_args ")" ["->" expr] stmts "end"
+return_stmt.3: "return" expr
+class_stmt.5: "class" CNAME ["<-" name_list] ["\n"] fields methods "end"
+?expr: cim
+
+name_list.3: CNAME ("," CNAME)*
+dotted_names: dotted_name ("," dotted_name)*
+dotted_name.3: CNAME ("." CNAME)*
+
+typed_name: CNAME ":" expr
+
+mb_typed_name: CNAME | CNAME ":" expr
+mb_typed_names: mb_typed_name ("," mb_typed_name)*
+
+with_default_name: mb_typed_name "=" expr
+with_default_names: with_default_name ("," with_default_name)*
+def_args: [mb_typed_names] | with_default_names | mb_typed_names "," with_default_names
+
+fields: (typed_name "\n"+)*
+methods: (def_stmt "\n"+)*
+
+// comparisons, identity, membership
+CIM_OP: "==" | "!=" | ">" | ">=" | "<" | "<=" | "is" | "is" "not" | "in" | "not" "in"
+?cim: sum
+    | cim CIM_OP sum
+
+SUM_OP: "+" | "-"
+?sum: product
+    | sum SUM_OP product
+
+PRODUCT_OP: "*" | "/"
+?product: modulus
+    | product PRODUCT_OP modulus
+
+MODULUS_OP: "%"
+?modulus: power
+    | modulus MODULUS_OP power
+
+POWER_OP: "**"
+?power: unary
+    | power POWER_OP unary
+
+UNARY_OP: "+" | "-" | "not"
+?unary: atom | UNARY_OP atom
+
+?atom: NUMBER
+    | funccall
+    | STRING
+    | CNAME
+    | "(" expr ")"
+    | list_value
+
+list_value: "[" nl_expr ("," nl_expr)* [","] "\n"* "]"
+nl_expr: "\n"* expr "\n"*
+
+funccall.4: dotted_name "(" call_args ")"
+
+args: expr ("," expr)*
+named_args: named_arg ("," named_arg)*
+named_arg: CNAME "=" expr
+call_args: [args] | named_args | args "," named_args
+
+WS: /[ \t\f\r]/+
+
+%import common.CNAME
+// %import common.WS
+%import common.NUMBER
+%import common.ESCAPED_STRING -> STRING
+
+%ignore WS

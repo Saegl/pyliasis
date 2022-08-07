@@ -1,0 +1,116 @@
+import that
+import math
+import os
+import itr
+
+
+print("hello, world")
+print(2 + 2 * 2)
+print(2 ** 5 - 16)
+
+x = 10
+if x > 5 then
+    print("x is a big number")
+    if x >= 10 then
+        print("may be too big")
+    end
+end
+
+
+sum_first_n = 0
+n = 10
+i = i
+while i <= n do
+    sum_first_n += i
+    i += 1
+end
+
+
+product_first_n = 1
+
+for val in range(1, n)
+    product_first_n *= val
+end
+
+
+# There is no pass! grammar little simpler
+
+if False end
+
+
+def factorial(n)
+    if n == 0 then
+        return 1
+    else
+        return n * factorial(n - 1)
+    end
+end
+
+# with gradual typing
+def factorial(n: int) -> int
+    # ... same code here
+end
+
+
+# with default values
+def factorial(n: int = 1) -> int
+    ...
+end
+
+
+class Animal
+    alive: bool
+end
+
+
+class Human <- Animal
+    name: str
+    surname: str
+end
+
+
+class ModernHuman <- Human
+    email: str
+
+    def talk(self)
+        print("Send your questions to my email", email)
+    end
+end
+
+# Rest is planned, but not implemented in parser
+class Stack[T]
+    data: list[T]
+
+    def push(self, val: T)
+        self.data.append(val)
+    end
+
+    def pop(self) -> T
+        return self.data.pop()
+    end
+end
+
+
+enum Status
+    Created
+    Uploaded
+    Ready
+end
+
+
+enum Status
+    Created
+    Uploaded(path: str)
+    Ready
+end
+
+status = Status.Uploaded("/home")
+
+match status
+case Created
+    print("Video entry just created")
+case Uploaded(path)
+    print("Video uploaded to ", path)
+case Ready
+    print("Video is ready to watch")
+end

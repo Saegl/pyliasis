@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "pyliasis"
+version = "0.1.0"
+description = "Python-like language prototype"
+authors = ["Saegl <saegl@protonmail.com>"]
+license = "GPLv3"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+lark-parser = "^0.12.0"
+
+[tool.poetry.dev-dependencies]
+black = "^22.6.0"
+pytest = "^7.1.2"
+
+[tool.pytest.ini_options]
+pythonpath = [
+    ".",
+]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
